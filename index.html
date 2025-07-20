@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق السوق السعودي للأسهم</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>السوق السعودي</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        لوحة التحكم
+                    </a>
+                    <a href="#stocks" class="nav-link" data-section="stocks">
+                        <i class="fas fa-chart-bar"></i>
+                        الأسهم
+                    </a>
+                    <a href="#indicators" class="nav-link" data-section="indicators">
+                        <i class="fas fa-chart-area"></i>
+                        المؤشرات
+                    </a>
+                    <a href="#strategies" class="nav-link" data-section="strategies">
+                        <i class="fas fa-brain"></i>
+                        الاستراتيجيات
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h2>
+                    <p>نظرة عامة على السوق السعودي</p>
+                </div>
+
+                <!-- Market Summary -->
+                <div class="market-summary">
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>مؤشر تاسي</h3>
+                            <div class="value" id="tasi-value">11,276.91</div>
+                            <div class="change negative" id="tasi-change">-32.45 (-0.29%)</div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>القيمة السوقية</h3>
+                            <div class="value">2.85 تريليون ريال</div>
+                            <div class="change neutral">--</div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>حجم التداول</h3>
+                            <div class="value" id="volume-value">156.8 مليون</div>
+                            <div class="change positive">+12.5%</div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>عدد الصفقات</h3>
+                            <div class="value" id="trades-value">45,678</div>
+                            <div class="change positive">+8.2%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Stocks -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-star"></i> أفضل الأسهم أداءً</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stock-list" id="top-stocks">
+                                <!-- سيتم ملؤها بـ JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-pie"></i> توزيع القطاعات</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="sectorsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stocks Section -->
+            <section id="stocks" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> الأسهم</h2>
+                    <p>تفاصيل الأسهم السعودية</p>
+                </div>
+
+                <!-- Stock Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="stock-search" placeholder="ابحث عن سهم برمز أو اسم الشركة...">
+                    </div>
+                    <button class="btn btn-primary" onclick="initializeStocks()">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث البيانات
+                    </button>
+                </div>
+
+                <!-- Stocks Grid -->
+                <div class="stocks-grid" id="stocks-grid">
+                    <!-- سيتم ملؤها بـ JavaScript -->
+                </div>
+
+                <!-- Stock Details Modal -->
+                <div id="stock-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="modal-stock-name">تفاصيل السهم</h3>
+                            <span class="close" onclick="closeStockModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="stock-details" id="stock-details">
+                                <!-- سيتم ملؤها بـ JavaScript -->
+                            </div>
+                            <div class="stock-chart-container">
+                                <canvas id="stock-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Indicators Section -->
+            <section id="indicators" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-area"></i> المؤشرات التقنية</h2>
+                    <p>تحليل فني متقدم للأسهم</p>
+                </div>
+
+                <!-- Indicator Controls -->
+                <div class="indicator-controls">
+                    <div class="control-group">
+                        <label for="indicator-stock">اختر السهم:</label>
+                        <select id="indicator-stock">
+                            <option value="">-- اختر سهم --</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="indicator-type">نوع المؤشر:</label>
+                        <select id="indicator-type">
+                            <option value="all">جميع المؤشرات</option>
+                            <option value="SMA">المتوسط المتحرك البسيط</option>
+                            <option value="RSI">مؤشر القوة النسبية</option>
+                            <option value="MACD">MACD</option>
+                            <option value="BB">نطاقات بولينجر</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadIndicators()">
+                        <i class="fas fa-calculator"></i>
+                        حساب المؤشرات
+                    </button>
+                </div>
+
+                <!-- Indicators Results -->
+                <div class="indicators-results">
+                    <div class="indicators-grid">
+                        <div class="indicator-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-signal"></i> الإشارات الحالية</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="current-signals">
+                                    <p class="no-data">اختر سهماً لعرض الإشارات</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="indicator-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-chart-line"></i> المؤشرات الشائعة</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="popular-indicators">
+                                    <!-- سيتم ملؤها بـ JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="indicator-chart-container">
+                        <canvas id="indicators-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Strategies Section -->
+            <section id="strategies" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-brain"></i> استراتيجيات التداول</h2>
+                    <p>استراتيجيات ذكية للاستثمار</p>
+                </div>
+
+                <!-- Strategy Cards -->
+                <div class="strategies-grid">
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <h3><i class="fas fa-trending-up"></i> استراتيجية المتوسطات المتحركة</h3>
+                            <span class="strategy-type">اتجاهية</span>
+                        </div>
+                        <div class="strategy-body">
+                            <p>استراتيجية تعتمد على تقاطع المتوسطات المتحركة لتحديد نقاط الدخول والخروج</p>
+                            <div class="strategy-metrics">
+                                <div class="metric">
+                                    <span class="label">معدل النجاح:</span>
+                                    <span class="value">68%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">المخاطرة:</span>
+                                    <span class="value risk-medium">متوسطة</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" onclick="applyStrategy('moving_average')">
+                                تطبيق الاستراتيجية
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <h3><i class="fas fa-balance-scale"></i> استراتيجية RSI</h3>
+                            <span class="strategy-type">تذبذبية</span>
+                        </div>
+                        <div class="strategy-body">
+                            <p>استراتيجية تعتمد على مؤشر القوة النسبية لتحديد مناطق ذروة الشراء والبيع</p>
+                            <div class="strategy-metrics">
+                                <div class="metric">
+                                    <span class="label">معدل النجاح:</span>
+                                    <span class="value">72%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">المخاطرة:</span>
+                                    <span class="value risk-low">منخفضة</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" onclick="applyStrategy('rsi')">
+                                تطبيق الاستراتيجية
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="strategy-header">
+                            <h3><i class="fas fa-layer-group"></i> استراتيجية MACD</h3>
+                            <span class="strategy-type">زخمية</span>
+                        </div>
+                        <div class="strategy-body">
+                            <p>استراتيجية تعتمد على تقارب وتباعد المتوسطات المتحركة</p>
+                            <div class="strategy-metrics">
+                                <div class="metric">
+                                    <span class="label">معدل النجاح:</span>
+                                    <span class="value">65%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="label">المخاطرة:</span>
+                                    <span class="value risk-high">عالية</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" onclick="applyStrategy('macd')">
+                                تطبيق الاستراتيجية
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Results -->
+                <div id="strategy-results" class="strategy-results" style="display: none;">
+                    <div class="results-header">
+                        <h3>نتائج الاستراتيجية</h3>
+                    </div>
+                    <div class="results-content" id="strategy-content">
+                        <!-- سيتم ملؤها بـ JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
